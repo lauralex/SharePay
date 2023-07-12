@@ -10,6 +10,16 @@ services:
     depends_on:
       - mysql_user_db
     restart: on-failure
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8083:8080
+    environment:
+      - ADMINER_DEFAULT_SERVER=mysql_user_db
+    depends_on:
+      - mysql_user_db
   
   mysql_user_db:
     image: mysql:8.0.33

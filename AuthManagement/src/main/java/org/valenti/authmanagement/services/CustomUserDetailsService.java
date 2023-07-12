@@ -1,29 +1,23 @@
 package org.valenti.authmanagement.services;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.valenti.authmanagement.dto.LoginDTO;
+import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements ReactiveUserDetailsService {
+
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        RestTemplate restTemplate = new RestTemplate();
-
-        ResponseEntity<LoginDTO> userToLogCredentials = restTemplate.exchange("http://localhost:8080/user/credentials/{username}", HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), LoginDTO.class, Map.of("username", username));
-
-        if(!userToLogCredentials.getStatusCode().is2xxSuccessful()) {
-            throw new UsernameNotFoundException("Wrong credentials. Retry");
-        }
-
-        return User.withUsername(username).password(userToLogCredentials.getBody().getPassword()).roles("USER").build();
+    public Mono<UserDetails> findByUsername(String username) {
+        return WebClient.create().get().uri("http://localhost:8080/user/credentials/{username}", Map.of("username", username)).retrieve().toEntity(LoginDTO.class).flatMap(responseEntityLoginDTO -> {
+            if (!responseEntityLoginDTO.getStatusCode().is2xxSuccessful()) {
+                return Mono.empty();
+            }
+            return Mono.just(User.withUsername(username).password("{noop}" + responseEntityLoginDTO.getBody().getPassword()).roles("USER").build());
+        });
     }
 }
