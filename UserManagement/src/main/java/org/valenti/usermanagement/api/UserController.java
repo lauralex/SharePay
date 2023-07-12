@@ -1,5 +1,6 @@
 package org.valenti.usermanagement.api;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.valenti.usermanagement.dto.LoginDTO;
@@ -42,10 +43,10 @@ public class UserController {
         return userService.signup(newUser);
     }
 
-    //POST http://localhost:8080/user/auth/login
-    @PostMapping(path="/auth/login")
-    public @ResponseBody String login(@RequestBody LoginDTO credentials) {
-        return userService.login(credentials);
+    //GET http://localhost:8080/user/auth/login
+    @GetMapping(path="/credentials/{username}")
+    public @ResponseBody ResponseEntity<LoginDTO> getUserCredentialsByUsername(@PathVariable String username) {
+        return userService.getUserCredentialsByUsername(username);
     }
 
     //DELETE http://localhost:8080/user/{id}

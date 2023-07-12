@@ -13,9 +13,4 @@ public class AuthManagementApplication {
 		SpringApplication.run(AuthManagementApplication.class, args);
 	}
 
-	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.build();
-	}
-
 }

@@ -1,5 +1,8 @@
 package org.valenti.usermanagement.services;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.valenti.usermanagement.dto.LoginDTO;
@@ -41,13 +44,13 @@ public class UserService {
         return "New user " + newUser.getUsername() + " registered!";
     }
 
-    public String login(LoginDTO credentials) {
-        Optional<User> userToLog = userRepository.findByEmail(credentials.getUsername());
+    public ResponseEntity<LoginDTO> getUserCredentialsByUsername(String username) {
+        Optional<User> userToLog = userRepository.findUserByUsername(username);
 
-        if (userToLog.isPresent() && userToLog.get().getPassword().equals(credentials.getPassword())) {
-            return "User " + userToLog.get().getUsername() + " logged in!";
+        if (userToLog.isPresent()) {
+            return new ResponseEntity<>(new LoginDTO(userToLog.get().getUsername(), userToLog.get().getPassword()), HttpStatus.ACCEPTED);
         }
-        return "Wrong credentials";
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     public String deleteUserById(Integer id) {
