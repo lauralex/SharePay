@@ -1,0 +1,27 @@
+services:
+  user_management:
+    build: ./UserManagement
+    ports:
+      - 8080:8080
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysql_user_db:3306/user_management?serverTimezone=UTC
+      - spring.datasource.username=root
+      - spring.datasource.password=toor
+    depends_on:
+      - mysql_user_db
+    restart: on-failure
+  
+  mysql_user_db:
+    image: mysql:8.0.33
+    environment:
+      - 'MYSQL_DATABASE=user_management'
+      - 'MYSQL_ROOT_PASSWORD=toor'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 30s
+      retries: 5
+
+volumes:
+  mysql_data:
