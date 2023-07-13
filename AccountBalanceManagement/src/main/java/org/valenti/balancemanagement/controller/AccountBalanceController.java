@@ -6,7 +6,7 @@ import org.valenti.balancemanagement.model.AccountBalance;
 import org.valenti.balancemanagement.services.AccountBalanceService;
 
 @Controller
-@RequestMapping(path="/user/balance")
+@RequestMapping(path="/balance")
 public class AccountBalanceController {
 
     AccountBalanceService accountBalanceService;
@@ -15,25 +15,25 @@ public class AccountBalanceController {
         this.accountBalanceService = accountBalanceService;
     }
 
-    //GET http://localhost:8080/user/balance/hello
+    //GET http://localhost:8080/balance/hello
     @GetMapping(path = "/hello")
     public @ResponseBody String sayHello() {
         return accountBalanceService.sayHello();
     }
 
-    //POST http://localhost:8080/user/balance/create/{id}
+    //POST http://localhost:8080/balance/create/{id}
     @PostMapping(path = "/create/{userId}")
     public @ResponseBody AccountBalance sayHello(@PathVariable Integer userId) {
         return accountBalanceService.createBalance(userId);
     }
 
-    //GET http://localhost:8080/user/balance/get/{id}
+    //GET http://localhost:8080/balance/get/{id}
     @GetMapping(path = "/{userId}")
     public @ResponseBody Float getBalanceByUser(@PathVariable Integer userId) {
         return accountBalanceService.getBalanceByUser(userId);
     }
 
-    //PUT http://localhost:8080:/user/balance/{userId}/recharghe/{amount}
+    //PUT http://localhost:8080/balance/{userId}/recharge/{amount}
     @PutMapping(path = "/{userId}/recharge/{amount}")
     public @ResponseBody void rechargeBalance(@PathVariable Integer userId, @PathVariable float amount) {
         accountBalanceService.rechargeBalance(userId, amount);

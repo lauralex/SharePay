@@ -20,8 +20,8 @@ public class SecurityConfiguration {
     // Authenticate all requests except those to /signup
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
-        http.authorizeExchange(exchanges -> exchanges.pathMatchers("/user-management/user/auth/signup").permitAll().anyExchange().authenticated())
-                .httpBasic(Customizer.withDefaults());
+        http.authorizeExchange(exchanges -> exchanges.pathMatchers("/user/signup").permitAll().anyExchange().authenticated())
+                .httpBasic(Customizer.withDefaults()).formLogin(Customizer.withDefaults());
         return http.build();
     }
 
