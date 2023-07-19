@@ -11,13 +11,13 @@ public class GatewayConfiguration {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("user-management", r -> r.path("/user/**")
-                        .uri("http://localhost:8080"))
+                        .uri("http://user-management:8080"))
                 .route("friendship-management", r -> r.path("/friendship/**")
-                        .uri("http://localhost:8082"))
+                        .uri("http://friendship-management:8080"))
                 .route("shared-payment-management", r -> r.path("/shared_payment/**")
-                        .uri("http://localhost:8083"))
+                        .uri("http://payment-management:8080"))
                 .route("balance-management", r -> r.path("/balance/**")
-                        .uri("http://localhost:8084"))
+                        .uri("http://balance-management:8080"))
                 .build();
     }
 }

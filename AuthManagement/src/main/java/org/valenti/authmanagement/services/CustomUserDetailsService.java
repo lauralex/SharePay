@@ -13,7 +13,7 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
-        return WebClient.create().get().uri("http://localhost:8080/user/credentials/{username}", Map.of("username", username)).retrieve().toEntity(LoginDTO.class).flatMap(responseEntityLoginDTO -> {
+        return WebClient.create().get().uri("http://user-management:8080/user/credentials/{username}", Map.of("username", username)).retrieve().toEntity(LoginDTO.class).flatMap(responseEntityLoginDTO -> {
             if (!responseEntityLoginDTO.getStatusCode().is2xxSuccessful()) {
                 return Mono.empty();
             }
